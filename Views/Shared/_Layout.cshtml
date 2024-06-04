@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JV_PuntoVenta</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/JV_PuntoVenta.styles.css" asp-append-version="true" />
+</head>
+<body>
+        <div class="row faa">
+
+            <div style="background-color:#111;color:#FFF;height:90vh" class="col col-1"
+                <nav class=" container-fluid d-flex flex-column">
+                    <div class="row my-4 d-flex flex-column align-content-center">
+                       <a asp-controller="Home"  style="color:white;text-align:center" asp-action="Index">JV_PuntoVenta</a>
+                    </div>
+                    
+                    <ul class="flex-grow-1" style="list-style: none;">
+                        <li class="my-3">
+                            <a style="color:white;text-decoration: none;" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                        </li>
+                        <li class="my-3">
+                            <a style="color:white;text-decoration: none;" class="blanco" asp-area="" asp-controller="Home" asp-action="Productos">Productos</a>
+                        </li>
+                        <li class="my-3">
+                            <a style="color:white;text-decoration: none;" class="blanco" asp-area="" asp-controller="Home" asp-action="Ventas">Ventas</a>
+                        </li>
+                        <li class="">
+                            <a style="color:white;text-decoration: none;" class="blanco" asp-area="" asp-controller="Home" asp-action="Privacy">Créditos</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <main role="main" class="col col-11">
+                <div class="row" style="overflow-y:scroll;overflow-x:hidden">
+                    @RenderBody()
+                </div>
+            </main>
+
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted" style="background-color:white">
+        <div class="container">
+            &copy; 2024 - JV_PuntoVenta - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
