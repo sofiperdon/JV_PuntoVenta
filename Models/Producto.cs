@@ -7,5 +7,6 @@
         public decimal Precio { get; set; }
         public string Categoria { get; set; }
         public DateTime LastUpdateDate { get; set; }
+        public int Stock { get; set; }
     }
 }

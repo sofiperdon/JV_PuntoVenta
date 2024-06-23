@@ -1,5 +1,6 @@
 using JV_PuntoVenta.Data;
 using JV_PuntoVenta.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace JV_PuntoVenta.Controllers
         }
 
         // GET: Ventas
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var ventas = await _context.Ventas.ToListAsync();
@@ -23,8 +25,11 @@ namespace JV_PuntoVenta.Controllers
         }
 
         // GET: Ventas/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
+           
+
             if (id == null)
             {
                 return NotFound();
@@ -49,6 +54,7 @@ namespace JV_PuntoVenta.Controllers
 
 
         // GET: Ventas/Create
+        [Authorize]
         public IActionResult Create()
         {
             var productos = _context.Productos
@@ -64,6 +70,7 @@ namespace JV_PuntoVenta.Controllers
         // POST: Ventas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,TransactionDateTime,Total,VentaProductos")] Venta venta, List<int> ProductoId, List<int> Cantidad)
         {
                 _context.Add(venta);
@@ -79,15 +86,21 @@ namespace JV_PuntoVenta.Controllers
                     };
                     _context.Add(ventaProducto);
                 }
+                foreach (var item in venta.VentaProductos)
+                {
+                    var producto = await _context.Productos.FindAsync(item.ProductoId);
+                    if (producto != null)
+                    {
+                        producto.Stock -= item.Cantidad;
+                    }
+                }
 
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "ID", "Nombre");
-            return View(venta);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Ventas/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -108,6 +121,7 @@ namespace JV_PuntoVenta.Controllers
         // POST: Ventas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var venta = await _context.Ventas
