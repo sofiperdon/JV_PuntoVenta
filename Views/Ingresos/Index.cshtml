@@ -1,0 +1,35 @@
+﻿@model IEnumerable<JV_PuntoVenta.Models.Ingreso>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="m-3">
+    <h1>INGRESOS</h1>
+
+    <p>
+        <a asp-action="Create">NUEVO INGRESO</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.TransactionDateTime)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransactionDateTime)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>

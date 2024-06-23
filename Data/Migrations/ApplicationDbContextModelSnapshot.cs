@@ -17,10 +17,52 @@ namespace JV_PuntoVenta.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.5")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("JV_PuntoVenta.Models.Ingreso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("TransactionDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ingreso");
+                });
+
+            modelBuilder.Entity("JV_PuntoVenta.Models.IngresoProducto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IngresoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IngresoId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("IngresoProducto");
+                });
 
             modelBuilder.Entity("JV_PuntoVenta.Models.Producto", b =>
                 {
@@ -43,6 +85,9 @@ namespace JV_PuntoVenta.Data.Migrations
 
                     b.Property<decimal>("Precio")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
 
                     b.HasKey("ID");
 
@@ -296,6 +341,25 @@ namespace JV_PuntoVenta.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("JV_PuntoVenta.Models.IngresoProducto", b =>
+                {
+                    b.HasOne("JV_PuntoVenta.Models.Ingreso", "Ingreso")
+                        .WithMany("IngresoProductos")
+                        .HasForeignKey("IngresoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JV_PuntoVenta.Models.Producto", "Producto")
+                        .WithMany()
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingreso");
+
+                    b.Navigation("Producto");
+                });
+
             modelBuilder.Entity("JV_PuntoVenta.Models.VentaProducto", b =>
                 {
                     b.HasOne("JV_PuntoVenta.Models.Producto", "Producto")
@@ -364,6 +428,11 @@ namespace JV_PuntoVenta.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("JV_PuntoVenta.Models.Ingreso", b =>
+                {
+                    b.Navigation("IngresoProductos");
                 });
 
             modelBuilder.Entity("JV_PuntoVenta.Models.Venta", b =>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JV_PuntoVenta.Data;
 using JV_PuntoVenta.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JV_PuntoVenta.Controllers
 {
@@ -20,12 +21,23 @@ namespace JV_PuntoVenta.Controllers
         }
 
         // GET: Productos
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Productos.ToListAsync());
+            var productos = from p in _context.Productos
+                            select p;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                productos = productos.Where(s => s.Nombre.Contains(searchString));
+            }
+
+            return View(await productos.ToListAsync());
         }
 
+
         // GET: Productos/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,6 +56,7 @@ namespace JV_PuntoVenta.Controllers
         }
 
         // GET: Productos/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +67,7 @@ namespace JV_PuntoVenta.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("ID,Nombre,Precio,Categoria,LastUpdateDate")] Producto producto)
         {
             if (ModelState.IsValid)
@@ -66,6 +80,7 @@ namespace JV_PuntoVenta.Controllers
         }
 
         // GET: Productos/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +101,7 @@ namespace JV_PuntoVenta.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Nombre,Precio,Categoria,LastUpdateDate")] Producto producto)
         {
             if (id != producto.ID)
@@ -117,6 +133,7 @@ namespace JV_PuntoVenta.Controllers
         }
 
         // GET: Productos/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +154,7 @@ namespace JV_PuntoVenta.Controllers
         // POST: Productos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var producto = await _context.Productos.FindAsync(id);

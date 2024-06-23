@@ -12,25 +12,40 @@
         <div class="row faa">
 
             <div style="background-color:#111;color:#FFF;height:90vh" class="col col-1"
-                <nav class=" container-fluid d-flex flex-column">
+                <nav class=" container-fluid d-flex flex-column justify-content-between">
                     <div class="row my-4 d-flex flex-column align-content-center">
                        <a asp-controller="Home"  style="color:white;text-align:center" asp-action="Index">JV_PuntoVenta</a>
                     </div>
-                    
-                    <ul class="flex-grow-1" style="list-style: none;">
-                        <li class="my-3">
-                            <a style="color:white;text-decoration: none;" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
-                        </li>
-                        <li class="my-3">
-                            <a style="color:white;text-decoration: none;" class="blanco" asp-area="" asp-controller="Home" asp-action="Productos">Productos</a>
-                        </li>
-                        <li class="my-3">
-                            <a style="color:white;text-decoration: none;" class="blanco" asp-area="" asp-controller="Home" asp-action="Ventas">Ventas</a>
-                        </li>
-                        <li class="">
-                            <a style="color:white;text-decoration: none;" class="blanco" asp-area="" asp-controller="Home" asp-action="Privacy">Créditos</a>
-                        </li>
-                    </ul>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                         <ul class="flex-grow-1" style="list-style: none;">
+                            <li class="my-3">
+                                <a style="color:white;text-decoration: none;" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                            </li>
+                            @if(User.IsInRole("Admin")){
+                                        <li class="my-3">
+                                            <a style="color:white;text-decoration: none;" class="blanco" asp-area="" asp-controller="Home" asp-action="Productos">Productos</a>
+                                        </li>
+                            }
+                            <li class="my-3">
+                                <a style="color:white;text-decoration: none;" class="blanco" asp-area="" asp-controller="Home" asp-action="Ventas">Ventas</a>
+                            </li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="my-3">
+                                    <a style="color:white;text-decoration: none;" class="blanco" asp-area="" asp-controller="Home" asp-action="Ingresos">Ingresos</a>
+                                    </li>
+                            }
+                            <li class="">
+                                <a style="color:white;text-decoration: none;" class="blanco" asp-area="" asp-controller="Home" asp-action="Privacy">Créditos</a>
+                            </li>
+                        </ul>
+                    }
+                    <div style="margin-top:300px" class="ml-3">
+                       <p>
+                            <partial name="_LoginPartial" />
+                       </p>
+                    </div>
                 </nav>
             </div>
 
@@ -44,6 +59,7 @@
     </div>
 
     <footer class="border-top footer text-muted" style="background-color:white">
+        
         <div class="container">
             &copy; 2024 - JV_PuntoVenta - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

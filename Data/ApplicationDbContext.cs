@@ -14,6 +14,7 @@ namespace JV_PuntoVenta.Data
         public DbSet<Producto> Productos { get; set; }
         public DbSet<Venta> Ventas { get; set; }
         public DbSet<VentaProducto> VentaProductos { get; set; }
+        public DbSet<JV_PuntoVenta.Models.Ingreso> Ingreso { get; set; } = default!;
 
     }
 }

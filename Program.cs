@@ -1,6 +1,17 @@
 using JV_PuntoVenta.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+
+async Task Configure(IServiceProvider serviceProvider)
+{
+
+var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +23,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>() 
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
+
+// Add SignInManager to the services
+builder.Services.AddScoped<SignInManager<IdentityUser>>();
 
 var app = builder.Build();
 
@@ -35,11 +50,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Add Authentication before Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
 
 app.Run();
